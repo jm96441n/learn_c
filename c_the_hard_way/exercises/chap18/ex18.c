@@ -46,6 +46,8 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
 	return target;
 }
 
+// ADD MERGE SORT HERE
+
 int sorted_order(int a, int b)
 {
 	return (a > b) - (a < b);
@@ -80,6 +82,15 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
 	printf("\n");
 
 	free(sorted);
+	
+	/* Break IT!!
+	unsigned char *data = (unsigned char *)cmp;
+
+	for(i = 0; i < 25; i++) {
+		printf("%02x:", data[i]);
+	}
+	printf("%s", "\n");
+	*/
 }
 
 int main(int argc, char *argv[])
@@ -101,7 +112,7 @@ int main(int argc, char *argv[])
 	test_sorting(numbers, count, sorted_order);
 	test_sorting(numbers, count, reverse_order);
 	test_sorting(numbers, count, strange_order);
-
+	
 	free(numbers);
 
 	return 0;
