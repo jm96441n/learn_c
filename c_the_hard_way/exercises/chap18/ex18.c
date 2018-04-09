@@ -17,20 +17,18 @@ void die(const char *message)
 // a typedef causes a fake pointer, in this case
 // for a pointer function
 typedef int (*compare_cb) (int a, int b);
+typedef void (*sort_function) (int *target, int count, compare_cb cmp);
 
 // A classic bubble sort function that uses the compare_cb to
 // do the sorting
-int *bubble_sort(int *numbers, int count, compare_cb cmp)
+void bubble_sort(int *target, int count, compare_cb cmp)
 {
 	int temp = 0;
 	int j = 0;
 	int i = 0;
-	int *target = malloc(count * sizeof(int));
 
 	if(!target)
 		die("Memory error.");
-
-	memcpy(target, numbers, count * sizeof(int));
 
 	for (i = 0; i < count; i++) {
 		for (j = 0; j < count - 1; j++) {
@@ -42,7 +40,7 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
 		}
 	}
 
-	return target;
+	return;
 }
 
 void merge(int *original_array, int *first_half, int *second_half, int left_count, int right_count, compare_cb cmp)
@@ -52,9 +50,9 @@ void merge(int *original_array, int *first_half, int *second_half, int left_coun
 	i = 0; j = 0; k = 0;
 	while(i < left_count && j < right_count) {
 		if(cmp(first_half[i], second_half[j]) > 0) {
-			original_array[k++] = first_half[i++];
-		} else {
 			original_array[k++] = second_half[j++];
+		} else {
+			original_array[k++] = first_half[i++];
 		}
 	}
 
@@ -91,7 +89,9 @@ void merge_sort(int *numbers, int count, compare_cb cmp)
 
 	merge_sort(first_half, midpoint, cmp);
 	merge_sort(second_half, count - midpoint, cmp);
+
 	merge(numbers, first_half, second_half, midpoint, count - midpoint, cmp);
+
 	free(first_half);
 	free(second_half);
 	return;
@@ -117,14 +117,15 @@ int strange_order(int a, int b)
 }
 
 // Used to test that we are sorting things correctly by doing the sort and printing it out
-void test_sorting(int *numbers, int count, compare_cb cmp)
+void test_sorting(int *numbers, int count, sort_function sort, compare_cb cmp)
 {
 	int i = 0;
 	int *target = malloc(count * sizeof(int));
-	memcpy(target, numbers, count * sizeof(int));
-	//int *sorted = merge_sort(numbers, count, cmp);
 
-	merge_sort(target, count, cmp);
+	memcpy(target, numbers, count * sizeof(int));
+
+	sort(target, count, cmp);
+
 	if(!target)
 		die("Failed to sort as requested.");
 
@@ -134,7 +135,6 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
 	printf("\n");
 
 	free(target);
-//	free(sorted);
 
 	/* Break IT!!
 	unsigned char *data = (unsigned char *)cmp;
@@ -162,9 +162,18 @@ int main(int argc, char *argv[])
 		numbers[i] = atoi(inputs[i]);
 	}
 
-	test_sorting(numbers, count, sorted_order);
-	test_sorting(numbers, count, reverse_order);
-	test_sorting(numbers, count, strange_order);
+	// Bubble sort
+	printf("Bubble Sort: \n");
+	test_sorting(numbers, count, bubble_sort, sorted_order);
+	test_sorting(numbers, count, bubble_sort, reverse_order);
+	test_sorting(numbers, count, bubble_sort, strange_order);
+
+	// Merge sort
+	printf("Merge Sort: \n");
+	test_sorting(numbers, count, merge_sort, sorted_order);
+	test_sorting(numbers, count, merge_sort, reverse_order);
+	test_sorting(numbers, count, merge_sort, strange_order);
+
 
 	free(numbers);
 
