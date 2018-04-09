@@ -120,16 +120,20 @@ int strange_order(int a, int b)
 void test_sorting(int *numbers, int count, compare_cb cmp)
 {
 	int i = 0;
+	int *target = malloc(count * sizeof(int));
+	memcpy(target, numbers, count * sizeof(int));
 	//int *sorted = merge_sort(numbers, count, cmp);
-	merge_sort(numbers, count, cmp);
-	if(!numbers)
+
+	merge_sort(target, count, cmp);
+	if(!target)
 		die("Failed to sort as requested.");
 
 	for (i = 0; i < count; i++) {
-		printf("%d ", numbers[i]);
+		printf("%d ", target[i]);
 	}
 	printf("\n");
 
+	free(target);
 //	free(sorted);
 
 	/* Break IT!!
@@ -157,22 +161,12 @@ int main(int argc, char *argv[])
 	for (i = 0; i < count; i++) {
 		numbers[i] = atoi(inputs[i]);
 	}
-  int *sorted, *reverse, *weird;
-	sorted = malloc(count * sizeof(int));
-	reverse = malloc(count * sizeof(int));
-	weird = malloc(count * sizeof(int));
 
-	memcpy(sorted, numbers, count * sizeof(int));
-	memcpy(reverse, numbers, count * sizeof(int));
-	memcpy(weird, numbers, count * sizeof(int));
-
-	test_sorting(sorted, count, sorted_order);
-	test_sorting(reverse, count, reverse_order);
-	test_sorting(weird, count, strange_order);
+	test_sorting(numbers, count, sorted_order);
+	test_sorting(numbers, count, reverse_order);
+	test_sorting(numbers, count, strange_order);
 
 	free(numbers);
-	free(sorted);
-	free(reverse);
-	free(weird);
+
 	return 0;
 }
