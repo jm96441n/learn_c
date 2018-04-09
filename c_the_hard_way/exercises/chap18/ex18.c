@@ -20,7 +20,6 @@ typedef int (*compare_cb) (int a, int b);
 
 // A classic bubble sort function that uses the compare_cb to 
 // do the sorting
-
 int *bubble_sort(int *numbers, int count, compare_cb cmp)
 {
 	int temp = 0;
@@ -46,7 +45,57 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
 	return target;
 }
 
-// ADD MERGE SORT HERE
+void merge(int *original_array, int *first_half, int *second_half, int left_count, int right_count, compare_cb cmp)
+{
+	int i, j, k;
+
+	i = 0; j = 0; k = 0;
+	while(i < left_count && j < right_count) {
+		if(cmp(first_half[i], second_half[j]) > 0) {
+			original_array[k++] = first_half[i++];
+		} else {
+			original_array[k++] = second_half[j++];
+		}
+	}
+
+	while(i < left_count) {
+		original_array[k++] = first_half[i++];
+	}
+
+	while(j < right_count) {
+		original_array[k++] = second_half[j++];
+	}
+
+	return;
+}
+
+void merge_sort(int *numbers, int count, compare_cb cmp)
+{
+	int midpoint, i, *first_half, *second_half;
+	if(count < 2) { 
+		return;
+	}
+	
+	midpoint = count / 2;
+
+	first_half = (int*)malloc(midpoint * sizeof(int));
+	second_half = (int*)malloc(midpoint * sizeof(int));
+
+	for(i = 0; i < midpoint; i++) {
+		first_half[i] = numbers[i];
+	}
+
+	for(i = midpoint; i < count; i++) {
+		second_half[i - midpoint] = numbers[i];
+	}
+	
+	merge_sort(first_half, midpoint, cmp);
+	merge_sort(second_half, count - midpoint, cmp);
+	merge(numbers, first_half, second_half, midpoint, count - midpoint, cmp);
+	free(first_half);
+	free(second_half);
+	return;
+}
 
 int sorted_order(int a, int b)
 {
@@ -71,17 +120,17 @@ int strange_order(int a, int b)
 void test_sorting(int *numbers, int count, compare_cb cmp)
 {
 	int i = 0;
-	int *sorted = bubble_sort(numbers, count, cmp);
-
-	if(!sorted)
+	//int *sorted = merge_sort(numbers, count, cmp);
+	merge_sort(numbers, count, cmp);
+	if(!numbers)
 		die("Failed to sort as requested.");
 	
 	for (i = 0; i < count; i++) {
-		printf("%d ", sorted[i]);
+		printf("%d ", numbers[i]);
 	}
 	printf("\n");
 
-	free(sorted);
+//	free(sorted);
 	
 	/* Break IT!!
 	unsigned char *data = (unsigned char *)cmp;
@@ -104,7 +153,7 @@ int main(int argc, char *argv[])
 
 	int *numbers = malloc(count * sizeof(int));
 	if(!numbers) die("Memory error.");
-
+	
 	for (i = 0; i < count; i++) {
 		numbers[i] = atoi(inputs[i]);
 	}
