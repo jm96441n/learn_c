@@ -10,15 +10,15 @@ void die(const char *message)
 		perror(message);
 	else
 		printf("ERROR: %s\n", message);
-	
+
 	exit(1);
 }
 
-// a typedef causes a fake pointer, in this case 
+// a typedef causes a fake pointer, in this case
 // for a pointer function
 typedef int (*compare_cb) (int a, int b);
 
-// A classic bubble sort function that uses the compare_cb to 
+// A classic bubble sort function that uses the compare_cb to
 // do the sorting
 int *bubble_sort(int *numbers, int count, compare_cb cmp)
 {
@@ -29,7 +29,7 @@ int *bubble_sort(int *numbers, int count, compare_cb cmp)
 
 	if(!target)
 		die("Memory error.");
-	
+
 	memcpy(target, numbers, count * sizeof(int));
 
 	for (i = 0; i < count; i++) {
@@ -72,10 +72,10 @@ void merge(int *original_array, int *first_half, int *second_half, int left_coun
 void merge_sort(int *numbers, int count, compare_cb cmp)
 {
 	int midpoint, i, *first_half, *second_half;
-	if(count < 2) { 
+	if(count < 2) {
 		return;
 	}
-	
+
 	midpoint = count / 2;
 
 	first_half = (int*)malloc(midpoint * sizeof(int));
@@ -88,7 +88,7 @@ void merge_sort(int *numbers, int count, compare_cb cmp)
 	for(i = midpoint; i < count; i++) {
 		second_half[i - midpoint] = numbers[i];
 	}
-	
+
 	merge_sort(first_half, midpoint, cmp);
 	merge_sort(second_half, count - midpoint, cmp);
 	merge(numbers, first_half, second_half, midpoint, count - midpoint, cmp);
@@ -124,14 +124,14 @@ void test_sorting(int *numbers, int count, compare_cb cmp)
 	merge_sort(numbers, count, cmp);
 	if(!numbers)
 		die("Failed to sort as requested.");
-	
+
 	for (i = 0; i < count; i++) {
 		printf("%d ", numbers[i]);
 	}
 	printf("\n");
 
 //	free(sorted);
-	
+
 	/* Break IT!!
 	unsigned char *data = (unsigned char *)cmp;
 
@@ -153,16 +153,26 @@ int main(int argc, char *argv[])
 
 	int *numbers = malloc(count * sizeof(int));
 	if(!numbers) die("Memory error.");
-	
+
 	for (i = 0; i < count; i++) {
 		numbers[i] = atoi(inputs[i]);
 	}
+  int *sorted, *reverse, *weird;
+	sorted = malloc(count * sizeof(int));
+	reverse = malloc(count * sizeof(int));
+	weird = malloc(count * sizeof(int));
 
-	test_sorting(numbers, count, sorted_order);
-	test_sorting(numbers, count, reverse_order);
-	test_sorting(numbers, count, strange_order);
-	
+	memcpy(sorted, numbers, count * sizeof(int));
+	memcpy(reverse, numbers, count * sizeof(int));
+	memcpy(weird, numbers, count * sizeof(int));
+
+	test_sorting(sorted, count, sorted_order);
+	test_sorting(reverse, count, reverse_order);
+	test_sorting(weird, count, strange_order);
+
 	free(numbers);
-
+	free(sorted);
+	free(reverse);
+	free(weird);
 	return 0;
 }
