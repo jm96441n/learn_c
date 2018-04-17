@@ -18,6 +18,9 @@ void scope_demo(int count)
 	count = 3000;
 
 	log_info("count after assign: %d", count);
+
+	// recursive call to cause stack overflow!
+	// scope_demo(count);
 }
 
 int main(int argc, char *argv[])
