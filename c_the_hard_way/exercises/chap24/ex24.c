@@ -1,4 +1,5 @@
-#include <stdio.h>
+ha#include <stdio.h>
+#include <stdlib.h>
 #include "dbg.h"
 
 #define MAX_DATA 100
@@ -33,9 +34,12 @@ int main(int argc, char *argv[])
 	printf("What's your last name? ");
 	in = fgets(you.last_name, MAX_DATA - 1, stdin);
 	check(in != NULL, "Failed to read last name.");
-
+	char *tmp[] = { 'a' };
 	printf("How old are you? ");
-	int rc = fscanf(stdin, "%d", &you.age);
+	in = fgets(&tmp, sizeof(char), stdin);
+	int rc = atoi(&tmp[0]);
+	you.age = rc;
+//	int rc = fscanf(stdin, "%d", &you.age);
 	check(rc > 0, "You have to enter a number.");
 
 	printf("What color are your eyes? \n");
