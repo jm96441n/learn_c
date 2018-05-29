@@ -16,7 +16,7 @@ void die(const char *message)
 
 void merge(int *original_array, int *first_half, int *second_half, int left_count, int right_count)
 {
-	int i = 0;int j = 0;int k = 0;
+	int i = 0; int j = 0; int k = 0;
 
 	while(i < left_count && j < right_count){
 		if(((first_half[i] < second_half[j]) - (first_half[i] > second_half[j])) > 0) {
@@ -71,25 +71,25 @@ void merge_sort(int *numbers, int count)
 
 void test_sorting(int *numbers, int count)
 {
+	int i = 0;
 	merge_sort(numbers, count);
-	printf("Result: ");
-	int i;
+
 	for(i = 0; i < count; i++) {
 		printf("%d ", numbers[i]);
 	}
-	printf("\n");
+
+	printf("%s", "\n");
 }
 
 int main(int argc, char *argv[])
 {
 	if(argc < 2)
-		die("Usage: ./merge_sort 4 3 5 1");
+		die("USAGE: ./merge_sort 4 3 1 5 6");
 
 	int count = argc - 1;
 	int i = 0;
 	char **inputs = argv + 1;
-
-	int *numbers = malloc(count * sizeof(int));
+	int *numbers = malloc(sizeof(int) * count);
 
 	for(i = 0; i < count; i++) {
 		numbers[i] = atoi(inputs[i]);
