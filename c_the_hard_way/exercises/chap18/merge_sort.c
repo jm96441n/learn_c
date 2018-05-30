@@ -3,6 +3,8 @@
 #include <errno.h>
 #include <string.h>
 
+typedef int (*compare_cb) (int a, int b);
+
 void die(const char *message)
 {
 	if (errno) {
@@ -14,12 +16,22 @@ void die(const char *message)
 	exit(1);
 }
 
-void merge(int *original_array, int *first_half, int *second_half, int left_count, int right_count)
+int normal_sort(int a, int b)
+{
+	return (a < b) - (a > b);
+}
+
+int reverse_sort(int a, int b)
+{
+	return (a > b) - (a < b);
+}
+
+void merge(int *original_array, int *first_half, int *second_half, int left_count, int right_count, compare_cb cmp)
 {
 	int i = 0; int j = 0; int k = 0;
 
 	while(i < left_count && j < right_count){
-		if(((first_half[i] < second_half[j]) - (first_half[i] > second_half[j])) > 0) {
+		if(cmp(first_half[i], second_half[j]) > 0) {
 			original_array[k++] = first_half[i++];
 		} else {
 			original_array[k++] = second_half[j++];
@@ -35,7 +47,7 @@ void merge(int *original_array, int *first_half, int *second_half, int left_coun
 	return;
 }
 
-void merge_sort(int *numbers, int count)
+void merge_sort(int *numbers, int count, compare_cb cmp)
 {
 	if(count < 2)
 		return;
@@ -60,19 +72,19 @@ void merge_sort(int *numbers, int count)
 		i++;
 	}
 
-	merge_sort(first_half, midpoint);
-	merge_sort(second_half, count - midpoint);
+	merge_sort(first_half, midpoint, cmp);
+	merge_sort(second_half, count - midpoint, cmp);
 
-	merge(numbers, first_half, second_half, midpoint, count - midpoint);
+	merge(numbers, first_half, second_half, midpoint, count - midpoint, cmp);
 
 	free(first_half);
 	free(second_half);
 }
 
-void test_sorting(int *numbers, int count)
+void test_sorting(int *numbers, int count, compare_cb cmp)
 {
 	int i = 0;
-	merge_sort(numbers, count);
+	merge_sort(numbers, count, cmp);
 
 	for(i = 0; i < count; i++) {
 		printf("%d ", numbers[i]);
@@ -95,7 +107,8 @@ int main(int argc, char *argv[])
 		numbers[i] = atoi(inputs[i]);
 	}
 
-	test_sorting(numbers, count);
+	test_sorting(numbers, count, normal_sort);
+	test_sorting(numbers, count, reverse_sort);
 
 	return 0;
 }
