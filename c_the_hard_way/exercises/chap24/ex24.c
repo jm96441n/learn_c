@@ -1,5 +1,4 @@
-ha#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>
 #include "dbg.h"
 
 #define MAX_DATA 100
@@ -23,26 +22,26 @@ typedef struct Person {
 
 int main(int argc, char *argv[])
 {
-	Person you = { .age = 0 };
+	Person you = {.age = 0};
 	int i = 0;
 	char *in = NULL;
 
 	printf("What's your first name? ");
 	in = fgets(you.first_name, MAX_DATA - 1, stdin);
+
 	check(in != NULL, "Failed to read first name.");
 
 	printf("What's your last name? ");
 	in = fgets(you.last_name, MAX_DATA - 1, stdin);
+
 	check(in != NULL, "Failed to read last name.");
-	char *tmp[] = { 'a' };
+
 	printf("How old are you? ");
-	in = fgets(&tmp, sizeof(char), stdin);
-	int rc = atoi(&tmp[0]);
-	you.age = rc;
-//	int rc = fscanf(stdin, "%d", &you.age);
+	int rc = fscanf(stdin, "%d", &you.age);
+
 	check(rc > 0, "You have to enter a number.");
 
-	printf("What color are your eyes? \n");
+	printf("What color are your eyes?\n");
 	for(i = 0; i <= OTHER_EYES; i++) {
 		printf("%d) %s\n", i + 1, EYE_COLOR_NAMES[i]);
 	}
@@ -50,16 +49,20 @@ int main(int argc, char *argv[])
 
 	int eyes = -1;
 	rc = fscanf(stdin, "%d", &eyes);
+
 	check(rc > 0, "You have to enter a number.");
 
 	you.eyes = eyes - 1;
-	check(you.eyes <= OTHER_EYES & you.eyes >= 0, "Do it right, that's not an option.");
+
+	check(you.eyes <= OTHER_EYES
+					&& you.eyes >= 0, "Do it right, that's not an option.");
 
 	printf("How much do you make an hour? ");
 	rc = fscanf(stdin, "%f", &you.income);
 	check(rc > 0, "Enter a floating point number.");
 
-	printf("-----------RESULTS------------\n");
+	printf("----RESULTS----\n");
+
 	printf("First Name: %s\n", you.first_name);
 	printf("Last Name: %s\n", you.last_name);
 	printf("Age: %d\n", you.age);
@@ -68,7 +71,7 @@ int main(int argc, char *argv[])
 
 	return 0;
 
+
 error:
 	return -1;
 }
-
