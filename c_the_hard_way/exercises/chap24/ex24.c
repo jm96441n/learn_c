@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "dbg.h"
 
 #define MAX_DATA 100
@@ -21,6 +22,28 @@ typedef struct Person {
 	float income;
 } Person;
 
+void trim(char *str)
+{
+	int i;
+	int begin = 0;
+	int end = strlen(str) - 1;
+	
+	// trim trailing whitespace	
+	while(isspace((unsigned char) str[end])) {
+		end--;
+	}
+	str[end + 1] = '\0';
+	while(isspace((unsigned char) str[begin])) {
+		begin++;
+	}
+		
+	for(i = begin; i <= end + 1; i++) {
+		str[i - begin] = str[i];
+	}
+		
+	return;
+}
+
 int main(int argc, char *argv[])
 {
 	Person you = {.age = 0};
@@ -31,11 +54,13 @@ int main(int argc, char *argv[])
 	in = fgets(you.first_name, MAX_DATA - 1, stdin);
 
 	check(in != NULL, "Failed to read first name.");
+	trim(you.first_name);
 
 	printf("What's your last name? ");
 	in = fgets(you.last_name, MAX_DATA - 1, stdin);
 
 	check(in != NULL, "Failed to read last name.");
+	trim(you.last_name);
 
 	printf("How old are you? ");
 	int rc = fscanf(stdin, "%d", &you.age);
