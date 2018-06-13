@@ -21,6 +21,20 @@ typedef struct Person {
 	float income;
 } Person;
 
+void read_from_input(int string_size, char *destination)
+{
+	char *full_input = NULL;
+	char input_char = '\0';
+	int i = 0;
+	scanf("%c", input_char); 
+	while(input_char != '\n') {
+		full_input[i++] = input_char;
+		scanf("%c", input_char);
+	}
+	full_input[i] = '\0';
+	memcpy(&destination, full_input, string_size);
+}
+
 int main(int argc, char *argv[])
 {
 	Person you = {.age = 0};
@@ -28,9 +42,10 @@ int main(int argc, char *argv[])
 	char *in = NULL;
 
 	printf("What's your first name? ");
-	in = fgets(you.first_name, MAX_DATA - 1, stdin);
+	// in = fgets(you.first_name, MAX_DATA - 1, stdin);
+	read_from_input(MAX_DATA, you.first_name);
 
-	check(in != NULL, "Failed to read first name.");
+	// check(in != NULL, "Failed to read first name.");
 
 	printf("What's your last name? ");
 	in = fgets(you.last_name, MAX_DATA - 1, stdin);
