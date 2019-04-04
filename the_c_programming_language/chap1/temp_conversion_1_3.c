@@ -2,7 +2,7 @@
 
 main()
 {
-  int fahr, cel;
+  float fahr, cel;
   int lower, upper, step;
 
   lower = 0;
@@ -12,8 +12,8 @@ main()
   fahr = lower;
 
   while(fahr <= upper) {
-    cel = (5 * (fahr - 32)) / 9;
-    printf("%3d %6d\n", fahr, cel);
+    cel = (5.0 / 9.0) * (fahr - 32.0);
+    printf("%3.0f %6.1f\n", fahr, cel);
     fahr = fahr + step;
   }
 }
