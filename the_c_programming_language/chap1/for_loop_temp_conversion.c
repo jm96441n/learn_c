@@ -1,9 +1,12 @@
 #include <stdio.h>
+#define UPPER 300
+#define LOWER 0
+#define STEP 20
 
 main() {
   /* Fahr to Cel*/
   printf("Fahrenheit \t Celsius\n");
-  for(int fahr = 300; fahr >= 0; fahr -= 20) {
+  for(int fahr = UPPER; fahr >= LOWER; fahr -= STEP) {
     printf("%3d \t\t %6.1f\n", fahr, ((5.0 / 9.0) * (fahr - 32)));
   }
 
@@ -13,7 +16,7 @@ main() {
 
   /* Cel to Fahr */
   printf("Celsius \t Fahrenheit\n");
-  for(int cel = 300; cel >= 0; cel -= 20) {
+  for(int cel = UPPER; cel >= LOWER; cel -= STEP) {
     printf("%3d \t\t %6.1f\n", cel, (((9.0 / 5.0) * cel) + 32));
   }
 }
