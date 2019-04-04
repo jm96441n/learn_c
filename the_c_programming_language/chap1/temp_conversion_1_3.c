@@ -13,7 +13,7 @@ main()
 
   while(fahr <= upper) {
     cel = (5 * (fahr - 32)) / 9;
-    printf("3%d 6%d\n", fahr, cel);
+    printf("%3d %6d\n", fahr, cel);
     fahr = fahr + step;
   }
 }
