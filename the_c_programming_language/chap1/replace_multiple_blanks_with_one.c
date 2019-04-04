@@ -6,9 +6,7 @@ main()
   int current_character, previous_character;
 
   while ((current_character = getchar()) != EOF) {
-    if ((current_character == previous_character) && (current_character == ' ')) {
-      continue;
-    } else {
+    if ((current_character != ' ') || (current_character != previous_character)) {
       previous_character = current_character;
       putchar(current_character);
     }
