@@ -1,7 +1,10 @@
 #include <stdio.h>
 
+void printSignedRange(int b);
+
 main()
 {
+/* my naive solution
   char high_char, low_char;
   short high_short, low_short;
   int high_int, low_int;
@@ -51,5 +54,22 @@ main()
   }
   low_double = high_double - 1;
   printf("Double Range: %f - %f\n", low_double, high_double);
+*/
+  printf("Range of char: ");
+  printSignedRange(sizeof(char));
+  printf("Range of short: ");
+  printSignedRange(sizeof(short));
+  printf("Range of int: ");
+  printSignedRange(sizeof(int));
+  printf("Range of long: ");
+  printSignedRange(sizeof(long));
+}
 
+void printSignedRange(int bytes)
+{
+  int bits = 8 * bytes;
+  /* use << to simulate power of 2 */
+  long long from = -(1LL << (bits - 1));
+  long long to = (1LL << (bits - 1)) - 1;
+  printf("%lld - %lld\n", from, to);
 }
