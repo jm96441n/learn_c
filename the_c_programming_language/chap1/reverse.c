@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define MAXLENGTH 1000
 
-void reverse(char s[], char d[], int destSize);
+void reverse(char s[], int destSize);
 
 main()
 {
@@ -10,24 +10,22 @@ main()
 
   lineLength = 0;
   while((c = getchar()) != EOF) {
-    lineCopy[lineLength] = c;
-    ++lineLength;
+    if (c == '\n') {
+      reverse(lineCopy, lineLength);
+      lineLength = 0;
+    } else {
+      lineCopy[lineLength] = c;
+      ++lineLength;
+    }
   }
-  char reversedLine[lineLength];
-  int i;
-
-  reverse(lineCopy, reversedLine, lineLength);
-
-  for(i = 0; i < lineLength + 1; ++i) {
-    printf("%c", reversedLine[i]);
-  }
-  printf("\n");
 }
 
-void reverse(char original[], char reversed[], int destSize)
+void reverse(char original[], int destSize)
 {
   int i;
+
   for (i = 0; i < destSize + 1; i++) {
-    reversed[i] = original[destSize - i];
+    printf("%c", original[destSize - i]);
   }
+  printf("\n");
 }
