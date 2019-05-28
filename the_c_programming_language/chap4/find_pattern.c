@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #define MAXLINE 1000
 
 int getLine(char line[], int max);
 int strindex(char source[], char searchfor[]);
+int strrindex(char source[], char searchFor[]);
 
 char pattern[] = "ould";
 
@@ -14,7 +16,7 @@ int main()
   int found = 0;
 
   while (getLine(line, MAXLINE) > 0) {
-    if (strindex(line, pattern) >= 0) {
+    if (strrindex(line, pattern) >= 0) {
       printf("%s", line);
       found++;
     }
@@ -54,5 +56,35 @@ int strindex(char s[], char t[])
       return i;
     }
   }
+  return -1;
+}
+
+int strrindex(char s[], char t[])
+{
+  int i, j, k;
+  int found_idx;
+  int k_idx;
+  int source_length = strlen(s);
+  int pattern_length = strlen(t);
+
+  for (i = 0; s[i] != '\0'; i++) {
+    for (j = i, k = 0; t[k] != '\0' && s[j] == t[k]; j++, k++) {
+      found_idx = i;
+      ;
+    }
+    if (k > 0 && t[k] == '\0') {
+      k_idx = k;
+    }
+    if ((source_length - i) < pattern_length) {
+      break;
+    }
+  }
+
+  if (k_idx > 0 && t[k_idx] == '\0') {
+    printf("%d\n", found_idx);
+    return found_idx;
+  }
+
+  printf("nope\n");
   return -1;
 }
